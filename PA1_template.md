@@ -44,14 +44,14 @@ head(steps_per_day)
 library(ggplot2)
 ggplot(steps_per_day, aes(x = steps)) + 
        geom_histogram(fill = "blue", binwidth = 1000) + 
-        labs(title="Histogram of Steps Taken per Day", 
+        labs(title="Steps Taken per Day", 
              x = "Number of Steps per Day", y = "Number of times in a day(Count)") + theme_bw() 
 ```
 
 ![](PA1_template_files/figure-html/calculate the mean total number of steps taken-1.png) 
 
 ```r
-# calculate the mean and medium of the steps
+# calculate the mean of the steps
 steps_mean   <- mean(steps_per_day$steps, na.rm=TRUE)
 steps_mean
 ```
@@ -61,6 +61,7 @@ steps_mean
 ```
 
 ```r
+# calculate the medium of the steps
 steps_median <- median(steps_per_day$steps, na.rm=TRUE)
 steps_median
 ```
@@ -92,7 +93,7 @@ ggplot(steps_per_interval, aes(x=interval, y=steps)) +
 ![](PA1_template_files/figure-html/average daily acvitiy pattern-1.png) 
 
 ```r
-# find the highest
+# find the maximum number of steps
 max_interval <- steps_per_interval[which.max(steps_per_interval$steps),]
 max_interval
 ```
@@ -107,6 +108,12 @@ max_interval
 
 
 ```r
+#strageties
+#1. calculate the number of missing value
+#2. replace the missing value
+#3. re-ensure again there is not missing value before ploting the histogram
+#4. plot the histogram
+
 # total number of missing values
 missing_vals <- sum(is.na(rdata$steps))
 missing_vals
@@ -158,7 +165,7 @@ Balance_fill
 fill_steps_per_day <- aggregate(steps ~ date, rdata_fill, sum)
 colnames(fill_steps_per_day) <- c("date","steps")
 
-##plotting the histogram
+##plotting the histogram after imputing missing values
 ggplot(fill_steps_per_day, aes(x = steps)) + 
        geom_histogram(fill = "blue", binwidth = 1000) + 
         labs(title="Histogram of Steps Taken per Day", 
@@ -201,8 +208,7 @@ data_by_weekdays <- function(data) {
 
 data_weekdays <- data_by_weekdays(rdata_fill)
 
-#plot the charts
-
+#plot the charts for comparison
 library(ggplot2)
 ggplot(data_weekdays, aes(x=interval, y=steps)) + 
         geom_line(color="orange") + 
